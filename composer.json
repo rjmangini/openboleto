@@ -1,7 +1,7 @@
 {
     "name": "rjmangini/openboleto",
     "type": "library",
-    "description": "Fork da openboleto/openboloto",
+    "description": "Fork da openboleto/openboleto",
     "keywords": ["boleto", "boleto bancario"],
     "homepage": "https://github.com/rjmangini/openboleto",
     "license": "MIT",
