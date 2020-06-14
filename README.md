@@ -1,14 +1,9 @@
+Fork do projeto OpenBoleto (ajustes para configurar o export em PDF)
+
 
 # OpenBoleto [![Build Status](https://travis-ci.org/openboleto/openboleto.png)](https://travis-ci.org/openboleto/openboleto)
 
-
-
 O OpenBoleto é uma biblioteca de código aberto para geração de boletos bancários, um meio de pagamento muito comum no Brasil. O foco é ser simples e ter uma arquitetura compatível com os recursos mais modernos do PHP.
-
-## Ajude o Projeto a continuar, faça uma doação!
-
-
-[![Pague com PagSeguro - é rápido, grátis e seguro!](https://stc.pagseguro.uol.com.br/public/img/botoes/doacoes/209x48-doar-assina.gif)](https://pag.ae/7UaL6CCHQ)
 
 ## Instalação
 ### Composer
