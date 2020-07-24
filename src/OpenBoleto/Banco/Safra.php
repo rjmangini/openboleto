@@ -118,9 +118,10 @@ class Safra extends BoletoAbstract
      */
     protected function gerarNossoNumero()
     {
-        $this->gerarDacNossoNumero(); // Força o calculo do DV.
-        $numero = self::zeroFill($this->getCarteira(), 3) . '/' . self::zeroFill($this->getSequencial(), 9);
-        $numero .= '-' . $this->dacNossoNumero;
+        // $this->gerarDacNossoNumero(); // Força o calculo do DV.
+        // $numero = self::zeroFill($this->getCarteira(), 3) . '/' . self::zeroFill($this->getSequencial(), 9);
+        $numero = self::zeroFill($this->getSequencial(), 9);
+        // $numero .= '-' . $this->dacNossoNumero;
 
         return $numero;
     }
@@ -133,18 +134,18 @@ class Safra extends BoletoAbstract
      * À exceção, estão as carteiras 126 - 131 - 146 - 150 e 168 cuja obtenção está baseada apenas nos dados
      * “CARTEIRA/NOSSO NÚMERO” da operação
      */
-    protected function gerarDacNossoNumero()
-    {
-        $carteira = self::zeroFill($this->getCarteira(), 3);
-        $sequencial = self::zeroFill($this->getSequencial(), 9);
-        if (in_array($this->getCarteira(), array('2'))) {
-            $this->dacNossoNumero = static::modulo10($carteira . $sequencial);
-        } else {
-            $agencia = self::zeroFill($this->getAgencia(), 5);
-            $conta = self::zeroFill($this->getConta(), 6);
-            $this->dacNossoNumero = static::modulo10($agencia . $conta . $carteira . $sequencial);
-        }
-    }
+    // protected function gerarDacNossoNumero()
+    // {
+    //     $carteira = self::zeroFill($this->getCarteira(), 3);
+    //     $sequencial = self::zeroFill($this->getSequencial(), 9);
+    //     if (in_array($this->getCarteira(), array('2'))) {
+    //         $this->dacNossoNumero = static::modulo10($carteira . $sequencial);
+    //     } else {
+    //         $agencia = self::zeroFill($this->getAgencia(), 5);
+    //         $conta = self::zeroFill($this->getConta(), 6);
+    //         $this->dacNossoNumero = static::modulo10($agencia . $conta . $carteira . $sequencial);
+    //     }
+    // }
 
     /**
      * Método para gerar o código da posição de 20 a 44
