@@ -202,4 +202,19 @@ class Safra extends BoletoAbstract
             'carteira' => $this->getCarteira(), // Campo não utilizado pelo Itaú
         );
     }
+
+    public function setEspecieDoc($especieDoc)
+    {
+        $especie = [
+            '01' => 'DM',
+            '02' => 'NP',
+            '03' => 'NS',
+            '05' => 'RC',
+            '09' => 'DS',
+            '99' => 'OU',
+        ];
+        $this->especieDoc = $especie[$especieDoc];
+        return $this;
+    }
+
 }
