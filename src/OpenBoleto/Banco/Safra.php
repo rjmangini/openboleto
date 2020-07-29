@@ -136,15 +136,16 @@ class Safra extends BoletoAbstract
      */
     protected function gerarDacNossoNumero()
     {
-        $carteira = self::zeroFill($this->getCarteira(), 1);
-        $sequencial = self::zeroFill($this->getSequencial(), 9);
-        if (in_array($this->getCarteira(), array('1'))) {
-            $this->dacNossoNumero = static::modulo10($this->getSequencial());
-        } else {
-            $agencia = self::zeroFill($this->getAgencia(), 5);
-            $conta = self::zeroFill($this->getConta(), 8);
-            $this->dacNossoNumero = static::modulo10($agencia . $conta . $carteira . $sequencial);
+        $base = self::zeroFill($this->getCodigoBanco(), 3) . $this->getMoeda() . $this->getDigitoVerificador() . $this->getFatorVencimento() . $this->getValorZeroFill() . $this->getCampoLivre();
+        $fixo = "43298765432987654329876543298765432";
+        $soma = 0;
+
+        for ($i = 0; $i < strlen($fixo); $i++)
+        {
+            $soma += substr($base, $i, 1) * substr($fixo, $i, 1);
         }
+        $resto = $soma % 11;
+        return $this->dacNossoNumero = ($resto <= 1 || $resto == 10) ? 1 : 11 - $resto;
     }
 
     /**
