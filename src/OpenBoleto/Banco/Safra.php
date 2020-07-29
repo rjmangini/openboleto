@@ -134,18 +134,18 @@ class Safra extends BoletoAbstract
      * À exceção, estão as carteiras 126 - 131 - 146 - 150 e 168 cuja obtenção está baseada apenas nos dados
      * “CARTEIRA/NOSSO NÚMERO” da operação
      */
-    // protected function gerarDacNossoNumero()
-    // {
-    //     $carteira = self::zeroFill($this->getCarteira(), 3);
-    //     $sequencial = self::zeroFill($this->getSequencial(), 9);
-    //     if (in_array($this->getCarteira(), array('2'))) {
-    //         $this->dacNossoNumero = static::modulo10($carteira . $sequencial);
-    //     } else {
-    //         $agencia = self::zeroFill($this->getAgencia(), 5);
-    //         $conta = self::zeroFill($this->getConta(), 6);
-    //         $this->dacNossoNumero = static::modulo10($agencia . $conta . $carteira . $sequencial);
-    //     }
-    // }
+    protected function gerarDacNossoNumero()
+    {
+        $carteira = self::zeroFill($this->getCarteira(), 1);
+        $sequencial = self::zeroFill($this->getSequencial(), 9);
+        if (in_array($this->getCarteira(), array('1'))) {
+            $this->dacNossoNumero = static::modulo10($this->getSequencial());
+        } else {
+            $agencia = self::zeroFill($this->getAgencia(), 5);
+            $conta = self::zeroFill($this->getConta(), 8);
+            $this->dacNossoNumero = static::modulo10($agencia . $conta . $carteira . $sequencial);
+        }
+    }
 
     /**
      * Método para gerar o código da posição de 20 a 44
@@ -159,36 +159,54 @@ class Safra extends BoletoAbstract
             return $this->campoLivre;
         }
 
-        $sequencial = self::zeroFill($this->getSequencial(), 9);
-        $carteira = self::zeroFill($this->getCarteira(), 1);
+        // $sequencial = self::zeroFill($this->getSequencial(), 9);
+        // $carteira = self::zeroFill($this->getCarteira(), 1);
         $agencia = self::zeroFill($this->getAgencia(), 5);
-        $conta = self::zeroFill($this->getConta(), 6);
-
-        // Carteira 198 - (Nosso Número com 15 posições) - Anexo 5 do manual
-        if (in_array($this->getCarteira(), array('107', '122', '142', '143', '196', '198'))) {
-            $codigo = $carteira . $sequencial .
-                self::zeroFill($this->getNumeroDocumento(), 7) .
-                self::zeroFill($this->getCodigoCliente(), 5);
-
-            // Define o DV da carteira para a view
-            $this->carteiraDv = $modulo = static::modulo10($codigo);
-
-            return $this->campoLivre = $codigo . $modulo . '0';
-        }
-
-        // Geração do DAC - Anexo 4 do manual
-        if (!in_array($this->getCarteira(), array('126', '131', '146', '150', '168'))) {
-            // Define o DV da carteira para a view
-            $this->carteiraDv = $dvAgContaCarteira = static::modulo10($agencia . $conta . $carteira . $sequencial);
-        } else {
-            // Define o DV da carteira para a view
-            $this->carteiraDv = $dvAgContaCarteira = static::modulo10($carteira . $sequencial);
-        }
+        $conta = self::zeroFill($this->getConta(), 8);
 
         // Módulo 10 Agência/Conta
-        $dvAgConta = static::modulo10($agencia . $conta);
+        $dvAgConta = static::modulo10($this->codigoBanco . $this->moeda . '7' . substr($agencia,0,4));
+        $dvConta   = static::modulo10(substr($agencia, 4, 1) . $conta . $this->getContaDv());
 
-        return $this->campoLivre = $carteira . $sequencial . $dvAgContaCarteira . $agencia . $conta . $dvAgConta . '000';
+        // $this->carteiraDv = $dvAgContaCarteira = static::modulo10($carteira . $sequencial);
+        return $this->campoLivre = substr($agencia, 0, 4) . $dvAgConta . substr($agencia, 4, 1) . $conta . $this->getContaDv() . $dvConta;
+    }
+
+    /**
+     * Retorna a linha digitável do boleto
+     *
+     * @return string
+     */
+    public function getLinhaDigitavel()
+    {
+        $chave = $this->getCampoLivre();
+
+        // Concatenates bankCode + currencyCode + first block of 5 characters and
+        // calculates its check digit for part1.
+        // $check_digit = static::modulo10($this->getCodigoBanco() . $this->getMoeda());
+        $check_digit = 7;
+
+        // Shift in a dot on block 20-24 (5 characters) at its 2nd position.
+        // $blocks['20-24'] = substr_replace($blocks['20-24'], '.', 1, 0);
+
+        // Concatenates bankCode + currencyCode + first block of 5 characters +
+        // checkDigit.
+        $part1 = $this->getCodigoBanco() . $this->getMoeda() . $check_digit;
+
+        $part2 = substr($chave, 0, 5) . ' ' . substr($chave, 5, 5) . '.' . substr($chave, -6);
+
+        // As part2, we do the same process again for part3.
+        $part3 = $sequencial = self::zeroFill($this->getSequencial(), 9) . '2'; // 2 fixo
+        $check_digit = static::modulo10($part3);
+        $part3 = substr($part3,0, 5) . '.' . substr($part3, -5) . $check_digit;
+
+        $this->gerarDacNossoNumero();
+        $cd = $this->dacNossoNumero;
+
+        $part4  = $this->getFatorVencimento() . $this->getValorZeroFill();
+
+        // Now put everything together.
+        return "$part1.$part2 $part3 $cd $part4";
     }
 
     /**
