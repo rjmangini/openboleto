@@ -10,24 +10,24 @@ $cedente = new Agente('Empresa de cosméticos LTDA', '02.123.123/0001-11', 'CLS 
 
 $boleto = new Safra(array(
     // Parâmetros obrigatórios
-    'dataVencimento' => new DateTime('2013-01-24'),
-    'valor' => 23.00,
-    'sequencial' => 12345678, // 8 dígitos
+    'dataVencimento' => new DateTime('2020-08-20'),
+    'valor' => 894.00,
+    'sequencial' => 57224, // 0 dígitos
     'sacado' => $sacado,
     'cedente' => $cedente,
     'agencia' => '02800', // 4 dígitos
     'carteira' => 1, // 3 dígitos
-    'conta' => 123456, // 5 dígitos
+    'conta' => 582494, // 5 dígitos
     
     // Parâmetro obrigatório somente se a carteira for
     // 107, 122, 142, 143, 196 ou 198
-    'codigoCliente' => 12345, // 5 dígitos
-    'numeroDocumento' => 1234567, // 7 dígitos
+    // 'codigoCliente' => 12345, // 5 dígitos
+    'numeroDocumento' => 57224, // 7 dígitos
 
     // Parâmetros recomendáveis
     //'logoPath' => 'http://empresa.com.br/logo.jpg', // Logo da sua empresa
-    'contaDv' => 2,
-    'agenciaDv' => 1,
+    'contaDv' => 5,
+    'agenciaDv' => 0,
     'descricaoDemonstrativo' => array( // Até 5
         'Compra de materiais cosméticos',
         'Compra de alicate',
