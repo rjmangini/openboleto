@@ -138,7 +138,6 @@ class Safra extends BoletoAbstract
     {
         $base = self::zeroFill($this->getCodigoBanco(), 3) . $this->getMoeda() . $this->getFatorVencimento() . $this->getValorZeroFill() . '7' . $this->getAgencia() . self::zeroFill($this->getConta(), 8) . $this->getContaDv() . self::zeroFill($this->getSequencial(), 9) . '2';
         $fixo = "4329876543298765432987654329876543298765432";
-        // dd($base, $fixo);
         $soma = 0;
 
         for ($i = 0; $i < strlen($fixo); $i++)
@@ -207,7 +206,6 @@ class Safra extends BoletoAbstract
 
         $part4  = $this->getFatorVencimento() . $this->getValorZeroFill();
 
-        dd("$part1.$part2 $part3 $cd $part4");
         // Now put everything together.
         return "$part1.$part2 $part3 $cd $part4";
     }
