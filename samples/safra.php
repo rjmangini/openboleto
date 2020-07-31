@@ -15,10 +15,10 @@ $boleto = new Safra(array(
     'sequencial' => 57224, // 0 dígitos
     'sacado' => $sacado,
     'cedente' => $cedente,
-    'agencia' => '02800', // 4 dígitos
+    'agencia' => '02800', // 5 dígitos
     'carteira' => 1, // 3 dígitos
-    'conta' => 582494, // 5 dígitos
-    
+    'conta' => 582494, // 6 dígitos
+
     // Parâmetro obrigatório somente se a carteira for
     // 107, 122, 142, 143, 196 ou 198
     // 'codigoCliente' => 12345, // 5 dígitos
