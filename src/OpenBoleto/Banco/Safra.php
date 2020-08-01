@@ -217,7 +217,7 @@ class Safra extends BoletoAbstract
      */
     public function getNumeroFebraban()
     {
-        return self::zeroFill($this->getCodigoBanco(), 3) . $this->getMoeda() . $this->dacNossoNumero() . $this->getFatorVencimento() . $this->getValorZeroFill() . $this->getAgencia() . $this->getConta() . $this->getContaDv() . self::zeroFill($this->getSequencial(), 9);
+        return self::zeroFill($this->getCodigoBanco(), 3) . $this->getMoeda() . $this->dacNossoNumero . $this->getFatorVencimento() . $this->getValorZeroFill() . '7' . $this->getAgencia() . self::zeroFill($this->getConta(), 8) . $this->getContaDv() . self::zeroFill($this->getSequencial(), 9) . '2';
     }
 
     /**
@@ -247,6 +247,3 @@ class Safra extends BoletoAbstract
     }
 
 }
-
-4229183300001990007028000058249450000568462
-42299833000019
