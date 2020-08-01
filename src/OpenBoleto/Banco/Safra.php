@@ -211,6 +211,16 @@ class Safra extends BoletoAbstract
     }
 
     /**
+     * Retorna o número Febraban
+     *
+     * @return string
+     */
+    public function getNumeroFebraban()
+    {
+        return self::zeroFill($this->getCodigoBanco(), 3) . $this->getMoeda() . $this->dacNossoNumero() . $this->getFatorVencimento() . $this->getValorZeroFill() . $this->getAgencia() . $this->getConta() . $this->getContaDv() . self::zeroFill($this->getSequencial(), 9);
+    }
+
+    /**
      * Define nomes de campos específicos do boleto do Itaú
      *
      * @return array
@@ -237,3 +247,6 @@ class Safra extends BoletoAbstract
     }
 
 }
+
+4229183300001990007028000058249450000568462
+42299833000019
