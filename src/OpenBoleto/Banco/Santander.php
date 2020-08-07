@@ -63,7 +63,7 @@ class Santander extends BoletoAbstract
      * Define as carteiras disponíveis para este banco
      * @var array
      */
-    protected $carteiras = array('101', '102', '201');
+    protected $carteiras = array('1', '3', '5', '6', '7');
 
     /**
      * Define os nomes das carteiras para exibição no boleto
@@ -112,10 +112,10 @@ class Santander extends BoletoAbstract
     protected function gerarDigitoVerificadorNossoNumero() {
         $sequencial = self::zeroFill($this->getSequencial(), 12);
         $digitoVerificador = static::modulo11($sequencial);
-        
+
         return $digitoVerificador['digito'];
     }
-    
+
     /**
      * Método para gerar o código da posição de 20 a 44
      *
@@ -126,7 +126,7 @@ class Santander extends BoletoAbstract
     {
         return '9' . self::zeroFill($this->getConta(), 7) .
             self::zeroFill($this->getSequencial(), 12) .
-            self::zeroFill($this->gerarDigitoVerificadorNossoNumero(), 1) .            
+            self::zeroFill($this->gerarDigitoVerificadorNossoNumero(), 1) .
             self::zeroFill($this->getIos(), 1) .
             self::zeroFill($this->getCarteira(), 3);
     }
