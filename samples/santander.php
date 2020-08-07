@@ -10,14 +10,14 @@ $cedente = new Agente('Empresa de cosméticos LTDA', '02.123.123/0001-11', 'CLS 
 
 $boleto = new Santander(array(
     // Parâmetros obrigatórios
-    'dataVencimento' => new DateTime('2013-01-24'),
-    'valor' => 23.00,
-    'sequencial' => 12345678901, // Até 13 dígitos
+    'dataVencimento' => new DateTime('2020-09-07'),
+    'valor' => 1444.2,
+    'sequencial' => 57252, // Até 13 dígitos
     'sacado' => $sacado,
     'cedente' => $cedente,
-    'agencia' => 1234, // Até 4 dígitos
-    'carteira' => 102, // 101, 102 ou 201
-    'conta' => 1234567, // Código do cedente: Até 7 dígitos
+    'agencia' => 4254, // Até 4 dígitos
+    'carteira' => 5, // 101, 102 ou 201
+    'conta' => 13002540, // Código do cedente: Até 7 dígitos
      // IOS – Seguradoras (Se 7% informar 7. Limitado a 9%)
      // Demais clientes usar 0 (zero)
     'ios' => '0', // Apenas para o Santander
@@ -45,8 +45,8 @@ $boleto = new Santander(array(
     //'pagamentoMinimo' => 23.00,
     //'aceite' => 'N',
     'especieDoc' => 'AB01C',
-    //'numeroDocumento' => '123.456.789',
-    //'usoBanco' => 'Uso banco',
+    'numeroDocumento' => '27200-1/1',
+    'usoBanco' => '4705670',
     //'layout' => 'layout.phtml',
     //'logoPath' => 'http://boletophp.com.br/img/opensource-55x48-t.png',
     //'sacadorAvalista' => new Agente('Antônio da Silva', '02.123.123/0001-11'),

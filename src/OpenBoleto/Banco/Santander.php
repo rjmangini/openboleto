@@ -105,8 +105,8 @@ class Santander extends BoletoAbstract
      */
     protected function gerarNossoNumero()
     {
-        $sequencial = self::zeroFill($this->getSequencial(), 12);
-        return $sequencial . '-' . $this->gerarDigitoVerificadorNossoNumero();
+        $sequencial = self::zeroFill($this->getUsoBanco(), 8);
+        return $sequencial;
     }
 
     protected function gerarDigitoVerificadorNossoNumero() {
@@ -133,6 +133,48 @@ class Santander extends BoletoAbstract
 
 
     /**
+     * Retorna a linha digitável do boleto
+     *
+     * @return string
+     */
+    public function getLinhaDigitavel()
+    {
+        $chave = $this->getCampoLivre();
+
+        // Concatenates bankCode + currencyCode + first block of 5 characters and
+        // calculates its check digit for part1.
+        // $check_digit = static::modulo10($this->getCodigoBanco() . $this->getMoeda());
+        $check_digit = 7;
+
+        // Shift in a dot on block 20-24 (5 characters) at its 2nd position.
+        // $blocks['20-24'] = substr_replace($blocks['20-24'], '.', 1, 0);
+
+        // Concatenates bankCode + currencyCode + first block of 5 characters +
+        // checkDigit.
+        $part1 = $this->getCodigoBanco() . $this->getMoeda() . $check_digit;
+
+        $part2 = substr($chave, 0, 5) . ' ' . substr($chave, 5, 5) . '.' . substr($chave, -6);
+
+        // As part2, we do the same process again for part3.
+        $part3 = $sequencial = self::zeroFill($this->getSequencial(), 9) . '2'; // 2 fixo
+        $check_digit = static::modulo10($part3);
+        $part3 = substr($part3,0, 5) . '.' . substr($part3, -5) . $check_digit;
+
+        $this->gerarDigitoVerificadorNossoNumero();
+        $cd = $this->getDigitoVerificador();
+
+        $part4  = $this->getFatorVencimento() . $this->getValorZeroFill();
+
+        // Now put everything together.
+        return "$part1.$part2 $part3 $cd $part4";
+    }
+
+    public function getNumeroFebraban()
+    {
+        return self::zeroFill($this->getCodigoBanco(), 3) . $this->getMoeda() . $this->getDigitoVerificador() . $this->getFatorVencimento() . $this->getValorZeroFill() . '9' . $this->getUsoBanco() . self::zeroFill($this->getNossoNumero(), 13) . '0005';
+    }
+
+    /**
      * Define variáveis da view específicas do boleto do Santander
      *
      * @return array
@@ -140,7 +182,7 @@ class Santander extends BoletoAbstract
     public function getViewVars()
     {
         return array(
-            'esconde_uso_banco' => true
+            'esconde_uso_banco' => false
         );
     }
 }
