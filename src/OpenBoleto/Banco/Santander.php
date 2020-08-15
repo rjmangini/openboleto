@@ -105,8 +105,8 @@ class Santander extends BoletoAbstract
      */
     protected function gerarNossoNumero()
     {
-        $sequencial = self::zeroFill($this->getUsoBanco(), 8);
-        return $sequencial;
+        $numero = self::zeroFill($this->getSequencial(), 8);
+        return $numero;
     }
 
     protected function gerarDigitoVerificadorNossoNumero() {
@@ -131,6 +131,18 @@ class Santander extends BoletoAbstract
              self::zeroFill($this->getCarteira(), 1);
      }
 
+
+    /**
+     * Retorna o campo Agência/Cedente do boleto
+     *
+     * @return string
+     */
+    public function getAgenciaCodigoCedente()
+    {
+        $agencia = $this->getAgencia();
+        $conta = $this->getUsoBanco();
+        return $agencia . ' / ' . $conta;
+    }
 
     /**
      * Retorna a linha digitável do boleto
@@ -171,7 +183,13 @@ class Santander extends BoletoAbstract
 
     public function getNumeroFebraban()
     {
-        return self::zeroFill($this->getCodigoBanco(), 3) . $this->getMoeda() . $this->getDigitoVerificador() . $this->getFatorVencimento() . $this->getValorZeroFill() . '9' . $this->getUsoBanco() . self::zeroFill($this->getNossoNumero(), 13) . '0005';
+        return self::zeroFill($this->getCodigoBanco(), 3) .
+            $this->getMoeda() . $this->getDigitoVerificador() .
+            $this->getFatorVencimento() .
+            $this->getValorZeroFill() . '9' .
+            $this->getUsoBanco() .
+            self::zeroFill($this->getNossoNumero(), 13) .
+            '0' . '101';
     }
 
     /**
