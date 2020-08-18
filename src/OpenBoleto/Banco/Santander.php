@@ -166,10 +166,10 @@ class Santander extends BoletoAbstract
         $part1  = $this->getCodigoBanco() . $this->getMoeda() . '9' . substr($this->getUsoBanco(), 0, 4);
         $part1 .= '.' . static::modulo10($part1);
 
-        $part2  = substr($this->getUsoBanco(), -3) . substr($this->getNossoNumero(), 0, 7);
+        $part2  = substr($this->getUsoBanco(), -3) . substr(self::zeroFill($this->getNossoNumero(), 13), 0, 7);
         $part2 .= '.' . static::modulo10($part2);
 
-        $part3  = substr($this->getNossoNumero(), -6) . '0' . '101';
+        $part3  = substr(self::zeroFill($this->getNossoNumero(), 13), -6) . '0' . '101';
         $part3 .= '.' . static::modulo10($part3);
 
         $part4 = $this->getDigitoVerificador();
@@ -203,3 +203,5 @@ class Santander extends BoletoAbstract
         );
     }
 }
+
+
