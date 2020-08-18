@@ -163,22 +163,21 @@ class Santander extends BoletoAbstract
 
         // Concatenates bankCode + currencyCode + first block of 5 characters +
         // checkDigit.
-        $part1 = $this->getCodigoBanco() . $this->getMoeda() . $check_digit;
+        $part1  = $this->getCodigoBanco() . $this->getMoeda() . '9' . substr($this->getUsoBanco(), 0, 4);
+        $part1 .= '.' . static::modulo10($part1);
 
-        $part2 = substr($chave, 0, 5) . ' ' . substr($chave, 5, 5) . '.' . substr($chave, -6);
+        $part2  = substr($this->getUsoBanco(), -3) . substr($this->getNossoNumero(), 0, 7);
+        $part2 .= '.' . static::modulo10($part2);
 
-        // As part2, we do the same process again for part3.
-        $part3 = $sequencial = self::zeroFill($this->getSequencial(), 9) . '2'; // 2 fixo
-        $check_digit = static::modulo10($part3);
-        $part3 = substr($part3,0, 5) . '.' . substr($part3, -5) . $check_digit;
+        $part3  = substr($this->getNossoNumero(), -6) . '0' . '101';
+        $part3 .= '.' . static::modulo10($part3);
 
-        $this->gerarDigitoVerificadorNossoNumero();
-        $cd = $this->getDigitoVerificador();
+        $part4 = $this->getDigitoVerificador();
 
-        $part4  = $this->getFatorVencimento() . $this->getValorZeroFill();
+        $part5  = $this->getFatorVencimento() . $this->getValorZeroFill();
 
         // Now put everything together.
-        return "$part1.$part2 $part3 $cd $part4";
+        return "$part1 $part2 $part3 $part4 $part5";
     }
 
     public function getNumeroFebraban()
