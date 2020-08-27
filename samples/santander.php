@@ -11,7 +11,7 @@ $cedente = new Agente('Empresa de cosméticos LTDA', '18361518000116', 'CLS 403 
 $boleto = [
     'vencimento' => '2020-09-07',
     'valor' => 1444.2,
-    'seq_reg_remessa' => 19,
+    'seq_reg_remessa' => 655,
     'agencia' => '4254',
     'agencia_dv' => null,
     'numero' => '13002540',
@@ -31,7 +31,7 @@ $boletoPdf = new Santander(array(
     // Parâmetros obrigatórios
     'dataVencimento' => new \DateTime($boleto['vencimento']),
     'valor' => $boleto['valor'],
-    'sequencial' => $boleto['uso_empresa'],
+    'sequencial' => $boleto['seq_reg_remessa'],
     'sacado' => $sacado,
     'cedente' => $cedente,
     'agencia' => $boleto['agencia'],
