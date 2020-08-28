@@ -164,13 +164,16 @@ class Santander extends BoletoAbstract
         // Concatenates bankCode + currencyCode + first block of 5 characters +
         // checkDigit.
         $part1  = $this->getCodigoBanco() . $this->getMoeda() . '9' . substr($this->getUsoBanco(), 0, 4);
-        $part1 .= '.' . static::modulo10($part1);
+        $part1 .= static::modulo10($part1);
+        $part1  = substr($part1, 0, 5) . '.' . substr($part1, -5);
 
         $part2  = substr($this->getUsoBanco(), -3) . substr(self::zeroFill($this->getNossoNumero(), 13), 0, 7);
-        $part2 .= '.' . static::modulo10($part2);
+        $part2 .= static::modulo10($part2);
+        $part2  = substr($part2, 0, 5) . '.' . substr($part2, -6);
 
         $part3  = substr(self::zeroFill($this->getNossoNumero(), 13), -6) . '0' . '101';
-        $part3 .= '.' . static::modulo10($part3);
+        $part3 .= static::modulo10($part3);
+        $part3  = substr($part3, 0, 5) . '.' . substr($part3, -6);
 
         $part4 = $this->getDigitoVerificador();
 
@@ -189,6 +192,30 @@ class Santander extends BoletoAbstract
             $this->getUsoBanco() .
             self::zeroFill($this->getNossoNumero(), 13) .
             '0' . '101';
+    }
+
+    protected function getDigitoVerificador()
+    {
+        $base = "2345678923456789234567892345678923456789234";
+        $num = self::zeroFill($this->getCodigoBanco(), 3) . $this->getMoeda() . $this->getFatorVencimento() . $this->getValorZeroFill() . '9' . $this->getUsoBanco() . self::zeroFill($this->getNossoNumero(), 13) . '0' . '101';
+        $inv = '';
+        for ($i = strlen($num) - 1; $i >= 0; $i--) {
+            $inv .= substr($num, $i, 1);
+        }
+
+        $soma = 0;
+        for ($i = 0; $i < strlen($base); $i++) {
+            $soma += (int) substr($inv, $i, 1) * (int) substr($base, $i, 1);
+//            echo substr($inv, $i, 1) . ' x ' . substr($base, $i, 1) . ' = ' . $soma .PHP_EOL;
+        }
+        $soma = $soma * 10;
+        $dv = $soma % 11;
+        if ($dv == 0 || $dv == 10)
+        {
+            $dv = 1;
+        }
+
+        return $dv;
     }
 
     /**

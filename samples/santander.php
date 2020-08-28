@@ -9,8 +9,8 @@ $sacado = new Agente('Fernando Maia', '023.434.234-34', 'ABC 302 Bloco N', '7200
 $cedente = new Agente('Empresa de cosméticos LTDA', '18361518000116', 'CLS 403 Lj 23', '71000-000', 'Brasília', 'DF');
 
 $boleto = [
-    'vencimento' => '2020-09-07',
-    'valor' => 1444.2,
+    'vencimento' => '2020-09-08',
+    'valor' => 1039.8,
     'seq_reg_remessa' => 655,
     'agencia' => '4254',
     'agencia_dv' => null,
